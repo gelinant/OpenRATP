@@ -1,7 +1,9 @@
-#Fichiers CSV 
+# Fichiers CSV 
 *.csv
 
 
+# Fichiers de configuration
+config.py
 
 
 # Byte-compiled / optimized / DLL files
