@@ -6,6 +6,7 @@ Created on Tue Dec 19 14:38:20 2017
 """
 
 import csv
+import datetime
 
 
 def valid_parstation_parjour(FICHIER):
@@ -19,7 +20,7 @@ def valid_parstation_parjour(FICHIER):
      Returns:
          dictionaire des données
 
-	 >>> valid_parstation_parjour(validations.csv):
+	 >>> d = valid_parstation_parjour('validations.csv'):
      >>> d['2017-05-10']['LES HALLES']
 	 41413
      """
@@ -56,8 +57,72 @@ def valid_parstation_parjour(FICHIER):
 
 
 
+
+
+
+
+
+
+def weekdaydetection(dico):
+	"""
+     sépare le jeu de donnée en 2 : les jours de la semaine et les autres
+ 
+     Args:
+         le dictionaire créé par la fonction valid_parstation_parjour
+ 
+     Returns:
+         liste de 2 dictionaires des données
+         le 1er element (l[0]) de la liste est les jours de le semanine
+         le 2eme (l[1]) les jours en weekend
+
+	 >>> d = valid_parstation_parjour('validations.csv'):
+     >>> l = weekdaydetection(d)
+	 >>> '2017-01-01' in l[0]
+	 False
+	 >>> '2017-01-02' in l[1]
+	 False
+	 >>> '2017-01-03' in l[0]
+	 True
+	 >>> '2017-02-12' in l[1]
+	 True
+
+     """
+	l = list()
+	weekday = dict()
+	weekend = dict()
+	#On crée ici deux dictionaires et une liste
+	# Les deux dictionaires contiennent soit les elements des jours qui tombent pendant une semeine ou ceux qui tombent un weekend
+
+	for day in dico.keys():
+		dayofweek = datetime.date(int(day[0:4]),int(day[5:7]),int(day[8:10])).isoweekday()
+		# pour chaque date on va extraire de la string l'année, le mois et le jour
+		# on construit avec cela un objet date et on appelle son attribut isoweekday ( pour lundi, 7 pour dimanche)
+
+
+		if dayofweek < 6: 
+			weekday[day] = dico[day]
+			#si c'est un jour de semaine, le ranger dans le dictionnaire semaine
+
+		else :
+			weekend[day] = dico[day]
+			# si c'est un jour de WE , le ranger dans le dico weekend
+
+	l.append(weekday)
+	l.append(weekend)
+
+	#on met les deux dico dans l et on retourne la liste
+	return l
+
+
+
+
+
+
+
 def main():
-    valid_parstation_parjour('validations.csv')
+    dic = valid_parstation_parjour('validations.csv')
+    l= weekdaydetection(dic)
+    print (l)
     pass
 
 if __name__ == '__main__':
