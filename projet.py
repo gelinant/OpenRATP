@@ -115,6 +115,34 @@ def weekdaydetection(dico):
 
 
 
+def moyennesurannee():
+
+	print(todo)
+
+
+
+
+
+
+
+
+def proportionnavigo_station():
+
+	print(todo)
+
+
+
+
+
+
+
+
+def build_histo():
+
+	print(todo)
+
+
+
 
 
 
