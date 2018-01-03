@@ -8,6 +8,7 @@ Created on Tue Dec 19 14:38:20 2017
 import csv
 import datetime
 import urllib.request
+import urllib
 import json
 import config
 
@@ -153,15 +154,21 @@ def build_stations_coordonates(dico):
 	randomday = list(dico.keys())[0] # on cherche un jour au hasard dans notre jeu de donnée
 	stations_loc = dict()
 	apikey = config.API_GMAPS_GEOCODE # on recupere la clef d'api du fichier de config.py
-	baseURL = 'http://maps.googleapis.com/maps/api/geocode/json?key='+apikey+'&address='
+	baseURL = 'https://maps.googleapis.com/maps/api/geocode/json?key='+apikey+'&address='
 
 	for station in dico[randomday].keys(): # on extrait la liste des noms des stations
-		URL = baseURL + station #On forme une URL complete
+		URL = baseURL + urllib.parse.quote(station) #On forme une URL complete et dans un format correct ( remplacer les espaces et caracs spéciaux )
 		URLObject = urllib.request.urlopen(URL)
 		data = json.loads(URLObject.read().decode()) # on ouvre et convertit le JSON
-		lati = data['results'][1]['geometry']['location']['lat'] #on extraie latitude et longitude dans des variables
-		longi= data['results'][1]['geometry']['location']['lng']
-		stations_loc[station]=[lati,longi] # On stocke les coordonées de la station dans le dictionaire
+		print(station)
+
+		if data['status'] != "OK":
+			print("l'api n'a pu localiser",station) # on cherche le code de retour pour voir si tout c'est bien passé
+		
+		else:
+			lati = data['results'][0]['geometry']['location']['lat'] #on extraie latitude et longitude dans des variables
+			longi= data['results'][0]['geometry']['location']['lng']
+			stations_loc[station]=[lati,longi] # On stocke les coordonées de la station dans le dictionaire
 
 	return stations_loc
 
@@ -177,7 +184,7 @@ def build_stations_coordonates(dico):
 def main():
     dic = valid_parstation_parjour('validations.csv')
     l= weekdaydetection(dic)
-    print (l)
+    geo = build_stations_coordonates(dic)
     pass
 
 if __name__ == '__main__':
