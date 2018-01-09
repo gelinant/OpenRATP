@@ -11,6 +11,7 @@ import urllib.request
 import urllib
 import json
 import config
+import math
 
 
 def valid_parstation_parjour(FICHIER):
@@ -119,14 +120,20 @@ def weekdaydetection(dico):
 
 
 
-def moyennesurannee():
+def moyennesurannee(dico):
 
-	print(todo)
+	moyennesta = dict()
+	for day in dico.keys():
+		for station in dico[day].keys():
+			if station in moyennesta:
+				moyennesta[station] += dico[day][station]
+			else:
+				moyennesta[station] = dico[day][station]
 
+	for station in moyennesta.keys():
+		moyennesta[station] = math.ceil(moyennesta[station]/len(dico.keys()))
 
-
-
-
+	return moyennesta
 
 
 
@@ -150,6 +157,7 @@ def build_histo():
 def build_stations_coordonates(dico):
 
 	#TODO : ERROR HANDLING
+	#IDEE : utiliser les données du STIF plutot que Google Maps (plus precis)
 
 	randomday = list(dico.keys())[0] # on cherche un jour au hasard dans notre jeu de donnée
 	stations_loc = dict()
@@ -160,7 +168,6 @@ def build_stations_coordonates(dico):
 		URL = baseURL + urllib.parse.quote(station) #On forme une URL complete et dans un format correct ( remplacer les espaces et caracs spéciaux )
 		URLObject = urllib.request.urlopen(URL)
 		data = json.loads(URLObject.read().decode()) # on ouvre et convertit le JSON
-		print(station)
 
 		if data['status'] != "OK":
 			print("l'api n'a pu localiser",station) # on cherche le code de retour pour voir si tout c'est bien passé
@@ -184,7 +191,9 @@ def build_stations_coordonates(dico):
 def main():
     dic = valid_parstation_parjour('validations.csv')
     l= weekdaydetection(dic)
-    geo = build_stations_coordonates(dic)
+    moy = moyennesurannee(dic)
+    print (moy)
+    #geo = build_stations_coordonates(dic)
     pass
 
 if __name__ == '__main__':
