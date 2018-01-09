@@ -12,6 +12,7 @@ import urllib
 import json
 import config
 import math
+import ast
 
 
 def valid_parstation_parjour(FICHIER):
@@ -151,37 +152,15 @@ def split_hist_data(moyennesta, limite):
 
 
 
-def build_stations_coordonates(filegeo,dico):
+def build_stations_coordonates(filegeo):
 
-	#TODO : ERROR HANDLING
-	#IDEE : utiliser les données du STIF plutot que Google Maps (plus precis)
-
-	# randomday = list(dico.keys())[0] # on cherche un jour au hasard dans notre jeu de donnée
-	# stations_loc = dict()
-	# apikey = config.API_GMAPS_GEOCODE # on recupere la clef d'api du fichier de config.py
-	# baseURL = 'https://maps.googleapis.com/maps/api/geocode/json?key='+apikey+'&address='
-
-	# for station in dico[randomday].keys(): # on extrait la liste des noms des stations
-	# 	URL = baseURL + urllib.parse.quote(station) #On forme une URL complete et dans un format correct ( remplacer les espaces et caracs spéciaux )
-	# 	URLObject = urllib.request.urlopen(URL)
-	# 	data = json.loads(URLObject.read().decode()) # on ouvre et convertit le JSON
-
-	# 	if data['status'] != "OK":
-	# 		print("l'api n'a pu localiser",station) # on cherche le code de retour pour voir si tout c'est bien passé
-		
-	# 	else:
-	# 		lati = data['results'][0]['geometry']['location']['lat'] #on extraie latitude et longitude dans des variables
-	# 		longi= data['results'][0]['geometry']['location']['lng']
-	# 		stations_loc[station]=[lati,longi] # On stocke les coordonées de la station dans le dictionaire
-
-	# return stations_loc
-
-
-
-
+	
 	with open(filegeo, 'r') as f:
 		r = csv.reader(f,delimiter=';')
 		l = list(r) # l'itérable est converti en liste
 		geos = dict()
-
-
+		for station in l[1:]:
+			lat = ast.literal_eval(station[1])['coordinates'][0]
+			longi = ast.literal_eval(station[1])['coordinates'][1]
+			geos[station[7]] = [lat, longi]
+		return geos
