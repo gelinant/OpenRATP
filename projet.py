@@ -136,65 +136,52 @@ def moyennesurannee(dico):
 	return moyennesta
 
 
-
-def proportionnavigo_station():
-
-	print(todo)
-
-
-
-
-
-
-
-
-def build_histo():
-
-	print(todo)
+def split_hist_data(moyennesta, limite):
+	l = list()
+	moy1 = dict()
+	moy2 = dict()
+	l=[moy1]+[moy2]
+	for data in moyennesta.keys():
+		if moyennesta[data] < limite :
+			moy1[data] = moyennesta[data]
+		else:
+			moy2[data] = moyennesta[data]
+	return l
 
 
 
-def build_stations_coordonates(dico):
+
+def build_stations_coordonates(filegeo,dico):
 
 	#TODO : ERROR HANDLING
 	#IDEE : utiliser les données du STIF plutot que Google Maps (plus precis)
 
-	randomday = list(dico.keys())[0] # on cherche un jour au hasard dans notre jeu de donnée
-	stations_loc = dict()
-	apikey = config.API_GMAPS_GEOCODE # on recupere la clef d'api du fichier de config.py
-	baseURL = 'https://maps.googleapis.com/maps/api/geocode/json?key='+apikey+'&address='
+	# randomday = list(dico.keys())[0] # on cherche un jour au hasard dans notre jeu de donnée
+	# stations_loc = dict()
+	# apikey = config.API_GMAPS_GEOCODE # on recupere la clef d'api du fichier de config.py
+	# baseURL = 'https://maps.googleapis.com/maps/api/geocode/json?key='+apikey+'&address='
 
-	for station in dico[randomday].keys(): # on extrait la liste des noms des stations
-		URL = baseURL + urllib.parse.quote(station) #On forme une URL complete et dans un format correct ( remplacer les espaces et caracs spéciaux )
-		URLObject = urllib.request.urlopen(URL)
-		data = json.loads(URLObject.read().decode()) # on ouvre et convertit le JSON
+	# for station in dico[randomday].keys(): # on extrait la liste des noms des stations
+	# 	URL = baseURL + urllib.parse.quote(station) #On forme une URL complete et dans un format correct ( remplacer les espaces et caracs spéciaux )
+	# 	URLObject = urllib.request.urlopen(URL)
+	# 	data = json.loads(URLObject.read().decode()) # on ouvre et convertit le JSON
 
-		if data['status'] != "OK":
-			print("l'api n'a pu localiser",station) # on cherche le code de retour pour voir si tout c'est bien passé
+	# 	if data['status'] != "OK":
+	# 		print("l'api n'a pu localiser",station) # on cherche le code de retour pour voir si tout c'est bien passé
 		
-		else:
-			lati = data['results'][0]['geometry']['location']['lat'] #on extraie latitude et longitude dans des variables
-			longi= data['results'][0]['geometry']['location']['lng']
-			stations_loc[station]=[lati,longi] # On stocke les coordonées de la station dans le dictionaire
+	# 	else:
+	# 		lati = data['results'][0]['geometry']['location']['lat'] #on extraie latitude et longitude dans des variables
+	# 		longi= data['results'][0]['geometry']['location']['lng']
+	# 		stations_loc[station]=[lati,longi] # On stocke les coordonées de la station dans le dictionaire
 
-	return stations_loc
-
-
+	# return stations_loc
 
 
 
 
+	with open(filegeo, 'r') as f:
+		r = csv.reader(f,delimiter=';')
+		l = list(r) # l'itérable est converti en liste
+		geos = dict()
 
 
-
-
-def main():
-    dic = valid_parstation_parjour('validations.csv')
-    l= weekdaydetection(dic)
-    moy = moyennesurannee(dic)
-    print (moy)
-    #geo = build_stations_coordonates(dic)
-    pass
-
-if __name__ == '__main__':
-    main()
