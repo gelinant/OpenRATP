@@ -164,3 +164,19 @@ def build_stations_coordonates(filegeo):
 			longi = ast.literal_eval(station[1])['coordinates'][1]
 			geos[station[7]] = [lat, longi]
 		return geos
+
+
+
+
+
+
+def build_map_data(geostation,moyennesta)
+	# construit un dictionaire associant un tableau [lon, lat] avec le nombre de visiteurs
+	# cela est fait pour chaque station
+
+	mapdata = dict() 
+	for station in moyennesta:
+		data = moyennesta[station]
+		geo = geostation[station]
+		mapdata[data] = geo 
+	return mapdata
