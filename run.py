@@ -21,8 +21,10 @@ def main():
     
     #GUI.build_histo(l[0])
     #GUI.build_histo(l[1])
-    geo = projet.build_stations_coordonates("emplacement-des-gares-idf.csv")
-    print(geo)
+    # geo = projet.build_stations_coordonates("emplacement-des-gares-idf.csv")
+    # md = projet.build_map_data(geo,moy)
+    GUI.build_map(0)
+    # print (md)
     pass
 
 if __name__ == '__main__':

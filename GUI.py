@@ -24,21 +24,31 @@ def build_map(dico):
     >>> 
     
     """
-    MY_MAP = Basemap(llcrnrlon=1.450561, llcrnrlat=48.136375, urcrnrlon=3.550762, urcrnrlat=49.240305,
-    rsphere=(6378137.00, 6356752.3142), resolution='i', projection='merc',area_thresh = 0.1)
+  #   MY_MAP = Basemap(lon_0=2.579747,lat_0=48.8411547,width=9999,height=9999,
+  # resolution='c', projection='merc', epsg=27571)
+
+ #     MY_MAP = Basemap(lon_0=2.344589,lat_0=48.851824,width=9999,height=9999,
+ # rsphere=(6378137.00, 6356752.3142), resolution='i', projection='merc',area_thresh = 0.1, epsg=27571)
+
+
+    # MY_MAP = Basemap(llcrnrlon=1.450561, llcrnrlat=48.136375, urcrnrlon=3.550762, urcrnrlat=49.240305,
+ # rsphere=(6378137.00, 6356752.3142), resolution='i', projection='merc',area_thresh = 0.1, epsg=27571)
+
+    MY_MAP = Basemap(llcrnrlon=-2.5, llcrnrlat=45, urcrnrlon=2.5, urcrnrlat=50,
+ rsphere=(6378137.00, 6356752.3142), resolution='i', projection='merc',area_thresh = 0.1, epsg=27571)
     # les coordonnées sont centrées sur l'ile de France sur un e projection mercator. on peut faire varier la resolution de l'image générée
 
     # UTILISER DES SHAPEFILES OU PLUS SIMPLEMENT UTILISER UNE VUE EN LIGNE TYPE GMAPS OU OPENSTREETMAPS SERAIT PLUS PERTINENT
     # RESOLUTION TROP PETITE
 
 
-    MY_MAP.bluemarble()
-    # blue marble est l'image satelite de la NASA
-    MY_MAP.drawcoastlines()
-    MY_MAP.drawmapboundary(fill_color='aqua')
+    
+    # MY_MAP.drawparallels()
+    # MY_MAP.drawmeridians()
+    
     MY_MAP.drawrivers()
+    MY_MAP.arcgisimage(xpixels =1500 , verbose = True)
     plt.show()
-
 
 
 

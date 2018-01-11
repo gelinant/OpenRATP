@@ -170,13 +170,16 @@ def build_stations_coordonates(filegeo):
 
 
 
-def build_map_data(geostation,moyennesta)
+def build_map_data(geostation,moyennesta):
 	# construit un dictionaire associant un tableau [lon, lat] avec le nombre de visiteurs
 	# cela est fait pour chaque station
 
-	mapdata = dict() 
-	for station in moyennesta:
+	mapdata = list() 
+	for station in moyennesta.keys():
 		data = moyennesta[station]
-		geo = geostation[station]
-		mapdata[data] = geo 
+		if not(station in geostation.keys()):
+			print(station , "non localisée")
+		else:
+			geo = geostation[station]
+			mapdata.append([data,geo])
 	return mapdata
