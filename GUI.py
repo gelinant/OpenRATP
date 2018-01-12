@@ -25,44 +25,28 @@ def build_map(dico):
     >>> 
     
     """
-  #   MY_MAP = Basemap(lon_0=2.579747,lat_0=48.8411547,width=9999,height=9999,
-  # resolution='c', projection='merc', epsg=27571)
 
- #    MY_MAP = Basemap(lon_0=2.344589,lat_0=44.851824,width=99999,height=99999,
- # rsphere=(6378137.00, 6356752.3142), resolution='l', projection='merc',area_thresh = 0.1, epsg=27571)
+    MY_MAP = Basemap(llcrnrlon=1.5, llcrnrlat=48.5, urcrnrlon=2.8, urcrnrlat=49.240305,
+ rsphere=(6378137.00, 6356752.3142), resolution='l', projection='merc', epsg=4326)
+    # MY_MAP = Basemap(llcrnrlon=-10, llcrnrlat=40, urcrnrlon=10, urcrnrlat=55,
+    #                  rsphere=(6378137.00, 6356752.3142), resolution='l',
+    #                  projection='merc', epsg=4326 )
+    MY_MAP.bluemarble()
 
-
-    MY_MAP = Basemap(llcrnrlon=-0.5, llcrnrlat=48.5, urcrnrlon=0.5, urcrnrlat=49.240305,
- rsphere=(6378137.00, 6356752.3142), resolution='l', projection='merc',area_thresh = 0.1, epsg=27571)
-
- #    MY_MAP = Basemap(llcrnrlon=-2.5, llcrnrlat=45, urcrnrlon=2.5, urcrnrlat=50,
- # rsphere=(6378137.00, 6356752.3142), resolution='l', projection='merc',area_thresh = 0.1, epsg=27571)
-    # les coordonnées sont centrées sur l'ile de France sur un e projection mercator. on peut faire varier la resolution de l'image générée
-
-    # UTILISER DES SHAPEFILES OU PLUS SIMPLEMENT UTILISER UNE VUE EN LIGNE TYPE GMAPS OU OPENSTREETMAPS SERAIT PLUS PERTINENT
-    # RESOLUTION TROP PETITE
-
-
-    
-    # MY_MAP.drawparallels()
-    # MY_MAP.drawmeridians()
     lon = []
     lat = []
     poids = []
     for station in dico:
         poids.append(station[0])
-        lon.append(station[1][1])
-        lat.append(station[1][0])
+        lon.append(station[1][0])
+        lat.append(station[1][1])
+    MIN_POIDS = min(poids)
     X_COORD, Y_COORD = MY_MAP(lon, lat)
-    CMAP = plt.cm.get_cmap('Oranges')
-
-
-
-
-    MY_MAP.drawrivers()
+    CMAP = plt.cm.get_cmap('cool')
+    SIZE = (np.array(poids)-MIN_POIDS+1)*20
     MY_MAP.arcgisimage(xpixels =1600 , verbose = True, service= 'ESRI_StreetMap_World_2D')
     heatmap, xedges, yedges = np.histogram2d(lon, lat, bins=200)
-    SCA = MY_MAP.scatter(X_COORD, Y_COORD, s=100, marker='o', c=poids, cmap=CMAP)
+    SCA = MY_MAP.scatter(X_COORD, Y_COORD, s=10, marker='o', c=poids, cmap=CMAP)
     plt.colorbar(SCA)
     plt.show()
 
