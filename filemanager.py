@@ -3,16 +3,38 @@ import urllib.request
 
 
 
-def checkfilesondisk():
-
-	for csv in ['valid1','valid2','gares']:
+def checkfileondisk(csv):
 		
-		try:
-			open(csv+'.csv','r')
-		except FileNotFoundError:
-			return False
+	try:
+		open(csv+'.csv','r')
+	except FileNotFoundError:
+		return False
 
 	return True
+
+
+
+
+
+
+def checkfilesondisk():
+	missing =[]
+	for csv in ['valid1','valid2','gares']:
+		isondisk = checkfileondisk(csv)
+		if isondisk == False:
+			missing += [csv]
+	return missing
+
+
+
+
+def downloadmissing():
+	missing = checkfilesondisk()
+	for elt in missing:
+		downloadfile(elt)
+
+
+
 
 
 
@@ -27,7 +49,10 @@ def downloadfile(FILE):
 		URL = "https://opendata.stif.info/explore/dataset/emplacement-des-gares-idf/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true"
 
 	else :
-		pass
+		print('error')
+		return('error')
+		
 	urllib.request.urlretrieve(URL, FILE+'.csv')
 
-print(checkfilesondisk())
+
+
