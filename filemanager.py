@@ -32,6 +32,7 @@ def downloadmissing():
 	missing = checkfilesondisk()
 	for elt in missing:
 		downloadfile(elt)
+	print('done')
 
 
 

@@ -10,7 +10,6 @@ import datetime
 import urllib.request
 import urllib
 import json
-import config
 import math
 import ast
 
@@ -177,9 +176,8 @@ def build_map_data(geostation,moyennesta):
 	mapdata = list() 
 	for station in moyennesta.keys():
 		data = moyennesta[station]
-		if not(station in geostation.keys()):
-			print(station , "non localisée")
-		else:
+		if station in geostation.keys():
+		
 			geo = geostation[station]
 			mapdata.append([data,geo])
 	return mapdata
